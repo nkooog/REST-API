@@ -48,17 +48,17 @@ class EventControllerTests {
                 .location("도화두손지젤시티")
                 .build();
         event.setId(100);
-        Mockito.when(eventRepository.save(event)).thenReturn(event);
+        Mockito.when(eventRepository.save(event)).thenReturn(event); // ???
 
         mockMvc.perform(post("/api/events")
                         .contentType(MediaType.APPLICATION_JSON) // 이 요청 본문에 json을 담아서 보내주고 있다
                         .accept(MediaTypes.HAL_JSON_VALUE) // 원하는 응답
-                        .content(objectMapper.writeValueAsString(event))
+                        .content(objectMapper.writeValueAsString(event)) // Response Body에 작성
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION))
+                .andExpect(header().exists(HttpHeaders.LOCATION)) // ??
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
         ;
     }
