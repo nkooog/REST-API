@@ -1,17 +1,15 @@
 package com.example.demo.events;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * 입력값을 받는 Dto를 생성하여 어노테이션 분리
+ */
 @Builder @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode(of="id")
-@Entity // ?
-public class Event {
-
-    @Id @GeneratedValue // ???
-    private Integer id;
+@Getter @Setter
+public class EventDto {
 
     private String name;
     private String description;
@@ -23,11 +21,5 @@ public class Event {
     private int basePrice; // (optional)
     private int maxPrice; // (optional)
     private int limitOfEnrollment;
-
-    private boolean offline;
-    private boolean free;
-
-    @Enumerated(EnumType.STRING) // ???
-    private EventStatus eventStatus;
 
 }
