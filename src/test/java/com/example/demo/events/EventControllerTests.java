@@ -39,6 +39,34 @@ class EventControllerTests {
     @Test
     public void createEvent() throws Exception{
 
+        EventDto event = EventDto.builder()
+                .name("Spring")
+                .description("REST API Develoment with Spring")
+                .beginEnrollmentDateTime(LocalDateTime.of(2023,12,12,22,57,22))
+                .closeEnrollmentDateTime(LocalDateTime.of(2023,12,12,22,57,22))
+                .endEventDateTime(LocalDateTime.of(2023,12,12,22,57,22))
+                .basePrice(100)
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("도화두손지젤시티")
+                .build();
+
+        mockMvc.perform(post("/api/events")
+                        .contentType(MediaType.APPLICATION_JSON) // 이 요청 본문에 json을 담아서 보내주고 있다
+                        .accept(MediaTypes.HAL_JSON_VALUE) // 원하는 응답
+                        .content(objectMapper.writeValueAsString(event)) // Response Body에 작성
+                )
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(header().exists(HttpHeaders.LOCATION)) // ??
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+                .andExpect(jsonPath("id").value(Matchers.not(100)));
+    }
+
+    @Test
+    public void createEvent_Bad_Request() throws Exception{
+
         Event event = Event.builder()
                 .id(100)
                 .name("Spring")
@@ -61,13 +89,7 @@ class EventControllerTests {
                         .content(objectMapper.writeValueAsString(event)) // Response Body에 작성
                 )
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION)) // ??
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-
-        ;
+                .andExpect(status().isBadRequest());
     }
 
 }
