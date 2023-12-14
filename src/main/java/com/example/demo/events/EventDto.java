@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 /**
  * 입력값을 받는 Dto를 생성하여 어노테이션 분리
  */
-@Builder @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@Data @Builder @AllArgsConstructor @NoArgsConstructor
 public class EventDto {
 
     private String name;
