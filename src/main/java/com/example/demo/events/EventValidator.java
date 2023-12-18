@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class EventValidator {
 
     public void validate(EventDto eventDto, Errors errors) {
-        if(eventDto.getMaxPrice() < eventDto.getBasePrice()
-                && eventDto.getMaxPrice() != 0) {
+        if(eventDto.getBasePrice() > eventDto.getMaxPrice()
+                && eventDto.getMaxPrice() > 0) {
             errors.rejectValue("basePrice","wrongValue","BasePrice is wrong");
             errors.rejectValue("maxPrice","wrongValue","maxPrice is wrong");
             errors.reject("wrongPrices","Value Prices are wrong");
@@ -21,18 +21,18 @@ public class EventValidator {
         LocalDateTime beginEventDateTime = eventDto.getBeginEventDateTime();
         LocalDateTime endEventDateTime = eventDto.getEndEventDateTime();
 
-
         if(endEventDateTime.isBefore(eventDto.getBeginEventDateTime())
         || endEventDateTime.isBefore(eventDto.getCloseEnrollmentDateTime())
         || endEventDateTime.isBefore(eventDto.getBeginEnrollmentDateTime())) {
             errors.rejectValue("endEventDateTime", "wrongValue", "endEventDateTime is wrong");
         }
 
+        // TODO beginEventDateTime
         if(beginEventDateTime.isBefore(eventDto.getCloseEnrollmentDateTime())
                 || beginEventDateTime.isBefore(eventDto.getBeginEnrollmentDateTime())) {
             errors.rejectValue("beginEventDateTime", "wrongValue", "beginEventDateTime is wrong");
         }
-
+        // TODO CloseEnrollmentDateTime
         if(closeEnrollmentDateTime.isBefore(eventDto.getBeginEnrollmentDateTime())) {
             errors.rejectValue("closeEnrollmentDateTime", "wrongValue", "closeEnrollmentDateTime is wrong");
         }

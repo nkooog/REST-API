@@ -2,6 +2,7 @@ package com.example.demo.events;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
 
 class EventTest {
 
@@ -21,6 +22,16 @@ class EventTest {
         event.setDescription("REST API");
 
         Assertions.assertEquals(name, event.getName());
+    }
+
+    @Test
+    public void testOffline() {
+        Event event = Event.builder()
+                .location("강남역")
+                .build();
+        event.update();
+
+        Assertions.assertTrue(event.isOffline());
     }
 
 }

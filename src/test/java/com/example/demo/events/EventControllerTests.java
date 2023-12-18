@@ -2,6 +2,7 @@ package com.example.demo.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,11 +41,12 @@ class EventControllerTests {
         EventDto event = EventDto.builder()
                 .name("Spring")
                 .description("REST API Develoment with Spring")
-                .beginEnrollmentDateTime(LocalDateTime.of(2023,12,12,22,57,22))
-                .closeEnrollmentDateTime(LocalDateTime.of(2023,12,12,22,57,22))
-                .endEventDateTime(LocalDateTime.of(2023,12,12,22,57,22))
-                .basePrice(100)
-                .maxPrice(200)
+                .beginEnrollmentDateTime(LocalDateTime.of(2023,10,18,21,28))
+                .closeEnrollmentDateTime(LocalDateTime.of(2023,11,18,21,28))
+                .beginEventDateTime(LocalDateTime.of(2023,12,15,21,28))
+                .endEventDateTime(LocalDateTime.of(2023,12,16,21,28))
+                .basePrice(0)
+                .maxPrice(0)
                 .limitOfEnrollment(100)
                 .location("도화두손지젤시티")
                 .build();
@@ -59,7 +61,9 @@ class EventControllerTests {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION)) // ??
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)));
+                .andExpect(jsonPath("free").value(true))
+                .andExpect(jsonPath("offline").value(true))
+                .andExpect(jsonPath("eventStatus").value(Matchers.not(EventStatus.DRAFT)));
     }
 
     @Test
@@ -87,7 +91,7 @@ class EventControllerTests {
                         .content(objectMapper.writeValueAsString(event)) // Response Body에 작성
                 )
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status( ).isBadRequest());
     }
 
     @Test
@@ -114,6 +118,30 @@ class EventControllerTests {
                 .andExpect(jsonPath("$[0].objectName").exists())
                 .andExpect(jsonPath("$[0].defaultMessage").exists())
                 .andExpect(jsonPath("$[0].code").exists());
+    }
+
+    @Test
+    public void testFree() {
+        // Given
+        Event event = Event.builder()
+                        .basePrice(0)
+                        .maxPrice(0)
+                .build();
+        // When
+        event.update();
+
+        // Then
+        Assertions.assertTrue(event.isFree());
+
+        // Given
+        event = event.builder()
+                .basePrice(0)
+                .maxPrice(20000)
+                .build();
+        // When
+        event.update();
+        // Then
+        Assertions.assertFalse(event.isFree());
     }
 
 }
