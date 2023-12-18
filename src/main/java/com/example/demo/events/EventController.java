@@ -33,14 +33,14 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) { //@Valid 바로 오른쪽에 있는 Errors 객체에 에러를 던져준다.
-
+        // Errors 는 자바빈 스펙을 준수하고 있지 않다 Event는 자바 빈 스펙을 준수하여 시리얼라이즈가 자동으로 진행된다.
         if(errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         eventValidator.validate(eventDto, errors);
         if(errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         /*Event event = Event.builder()
