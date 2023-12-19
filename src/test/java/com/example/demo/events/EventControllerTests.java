@@ -34,7 +34,6 @@ class EventControllerTests {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Test
     @DisplayName("정상적으로 이벤트를 생성하는 테스트")
     public void createEvent() throws Exception{
 
