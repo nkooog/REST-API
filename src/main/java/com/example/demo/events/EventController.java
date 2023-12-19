@@ -46,7 +46,7 @@ public class EventController {
         /*Event event = Event.builder()
                 .name(eventDto.getName())
                 .build();*/
-        // ModelMapper 라이브러리 사용하여 위에 과정생략
+        // ModelMapper 라이브러리 사용하여 위에 과정생략함
         Event event = modelMapper.map(eventDto, Event.class);
         event.update();
         Event newEvent = this.eventRepository.save(event);
