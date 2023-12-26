@@ -50,15 +50,15 @@ public class EventController {
 		event.update();
 		Event newEvent = this.eventRepository.save(event);
 
-		WebMvcLinkBuilder listLinkBuilder = linkTo(EventController.class);
-		WebMvcLinkBuilder selfLinkBuilder = listLinkBuilder.slash(newEvent.getId());
-
 		EventResource eventResource = new EventResource(newEvent);
-		eventResource.add(listLinkBuilder.withRel("query-list"));
-		eventResource.add(selfLinkBuilder.withSelfRel() );
+		WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
 
-        URI createUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
-		return ResponseEntity.created(selfLinkBuilder.toUri()).body(eventResource);
+        URI createUri = selfLinkBuilder.toUri();
+
+		eventResource.add(linkTo(EventController.class).withRel("query-events"));
+		eventResource.add(selfLinkBuilder.withRel("update-events"));
+
+		return ResponseEntity.created(createUri).body(eventResource);
 		// created() 보낸땐 항상 URI 가 필요하다
 	}
 
