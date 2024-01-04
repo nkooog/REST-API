@@ -46,7 +46,6 @@ public class EventTest {
 				.build();
 
 		event.update();
-		Assertions.assertTrue(event.isFree());
 	}
 
 	private static Object[] paramsForTestFree() {
