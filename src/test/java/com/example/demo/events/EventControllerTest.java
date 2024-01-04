@@ -83,8 +83,8 @@ class EventControllerTest {
 						,linkWithRel("update-events").description("link to update")
 					),
 					requestHeaders(
-						 headerWithName(HttpHeaders.ACCEPT).description("accept header")
-						,headerWithName(HttpHeaders.CONTENT_TYPE).description("content-type header")
+						 headerWithName(HttpHeaders.ACCEPT).description("APPLICATION_JSON")
+						,headerWithName(HttpHeaders.CONTENT_TYPE).description("content-type")
 					),
 					requestFields(
 						 fieldWithPath("name").description("Name of new event")
@@ -99,8 +99,8 @@ class EventControllerTest {
 						,fieldWithPath("location").description("location of new event")
 					),
 					responseHeaders(
-						  headerWithName(HttpHeaders.LOCATION).description("Location header")
-						 ,headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-type")
+						  headerWithName(HttpHeaders.LOCATION).description("/api/events")
+						 ,headerWithName(HttpHeaders.CONTENT_TYPE).description("hal_json")
 					),
 					responseFields(
 						 fieldWithPath("id").description("id of new event")
