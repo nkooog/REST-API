@@ -81,12 +81,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>5.2.0</version>
-            <scope>test</scope> <!-- 테스트 스코프에서 사용할 것으로 지정 -->
-        </dependency>
     </dependencies>
 
     <build>
@@ -116,7 +110,7 @@
                     <dependency>
                         <groupId>org.springframework.restdocs</groupId>
                         <artifactId>spring-restdocs-asciidoctor</artifactId>
-                        <version>2.0.2.RELEASE</version>
+                        <version>3.0.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
