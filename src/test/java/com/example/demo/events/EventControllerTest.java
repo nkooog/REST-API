@@ -81,6 +81,7 @@ class EventControllerTest {
 						 linkWithRel("self").description("link to self")
 						,linkWithRel("query-events").description("link to query")
 						,linkWithRel("update-events").description("link to update")
+						,linkWithRel("profile").description("link to profile")
 					),
 					requestHeaders(
 						 headerWithName(HttpHeaders.ACCEPT).description("APPLICATION_JSON")
@@ -120,6 +121,7 @@ class EventControllerTest {
 						,fieldWithPath("_links.self.href").description("links.self")
 						,fieldWithPath("_links.query-events.href").description("links.query-events")
 						,fieldWithPath("_links.update-events.href").description("links.update-events")
+						,fieldWithPath("_links.profile.href").description("links.profile")
 					)
 			));
 	}

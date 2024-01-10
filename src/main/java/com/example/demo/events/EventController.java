@@ -2,6 +2,7 @@ package com.example.demo.events;
 
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,7 @@ public class EventController {
 
 		eventResource.add(linkTo(EventController.class).withRel("query-events"));
 		eventResource.add(selfLinkBuilder.withRel("update-events"));
+		eventResource.add(Link.of("/docs/index.html#resources-events-create").withRel("profile"));
 
 		return ResponseEntity.created(createUri).body(eventResource);
 		// created() 보낸땐 항상 URI 가 필요하다
