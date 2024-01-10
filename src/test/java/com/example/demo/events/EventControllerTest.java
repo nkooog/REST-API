@@ -2,7 +2,6 @@ package com.example.demo.events;
 
 import com.example.demo.common.RestDocsConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @Import(RestDocsConfiguration.class)
+@ActiveProfiles("test")
 class EventControllerTest {
 
 	@Autowired
@@ -43,6 +44,7 @@ class EventControllerTest {
 
 	@Autowired
 	ObjectMapper objectMapper;
+
 
 	@Test
 	@DisplayName("정상적으로 이벤트를 생성하는 테스트")
@@ -60,7 +62,6 @@ class EventControllerTest {
 			.limitOfEnrollment(100)
 			.location("Inchon City")
 			.build();
-
 	mockMvc.perform(post("/api/events")
 					.contentType(MediaType.APPLICATION_JSON) // 이 요청 본문에 json을 담아서 보내주고 있다
 					.accept(MediaTypes.HAL_JSON_VALUE) // 원하는 응답
