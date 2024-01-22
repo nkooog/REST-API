@@ -1,13 +1,18 @@
 package com.example.demo.events;
 
+import com.example.demo.common.ErrorResource;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +40,12 @@ public class EventController {
 	public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) { //@Valid 바로 오른쪽에 있는 Errors 객체에 에러를 던져준다.
 		// Errors 는 자바빈 스펙을 준수하고 있지 않다 Event는 자바 빈 스펙을 준수하여 시리얼라이즈가 자동으로 진행된다.
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(errors);
+			return getErrorResourceResponseEntity(errors);
 		}
 
 		eventValidator.validate(eventDto, errors);
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(errors);
+			return getErrorResourceResponseEntity(errors);
 		}
 
         /*Event event = Event.builder()
@@ -62,6 +67,18 @@ public class EventController {
 
 		return ResponseEntity.created(createUri).body(eventResource);
 		// created() 보낸땐 항상 URI 가 필요하다
+	}
+
+	private static ResponseEntity<ErrorResource> getErrorResourceResponseEntity(Errors errors) {
+		return ResponseEntity.badRequest().body(new ErrorResource(errors));
+	}
+
+	@GetMapping
+	public ResponseEntity queryEvent(Pageable pageable, PagedResourcesAssembler<Event> assembler) {
+		Page<Event> page = this.eventRepository.findAll(pageable);
+		var pageResources = assembler.toModel(page, EventResource::new);
+		pageResources.add(Link.of("/docs/index.html#resources-events-create").withRel("profile"));
+		return ResponseEntity.ok().body(pageResources);
 	}
 
 }
