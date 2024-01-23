@@ -2,6 +2,7 @@ package com.example.demo.events;
 
 import com.example.demo.common.ErrorResource;
 import jakarta.validation.Valid;
+import org.hibernate.event.spi.EventSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,12 +13,10 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -76,9 +75,44 @@ public class EventController {
 	@GetMapping
 	public ResponseEntity queryEvent(Pageable pageable, PagedResourcesAssembler<Event> assembler) {
 		Page<Event> page = this.eventRepository.findAll(pageable);
-		var pageResources = assembler.toModel(page, EventResource::new);
-		pageResources.add(Link.of("/docs/index.html#resources-events-create").withRel("profile"));
-		return ResponseEntity.ok().body(pageResources);
+		var pagedResources = assembler.toModel(page, EventResource::new);
+		pagedResources.add(Link.of("/docs/index.html#resources-events-create").withRel("profile"));
+		return ResponseEntity.ok(pagedResources);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity getEvent(@PathVariable Integer id) {
+		Optional<Event> optionalEvent = this.eventRepository.findById(id);
+
+		if(optionalEvent.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		Event event = optionalEvent.get();
+		EventResource eventResource = new EventResource(event);
+		eventResource.add(Link.of("/docs/index.html#resources-events-get").withRel("profile"));
+		return ResponseEntity.ok(eventResource);
+
+	}
+
+	@PutMapping("{id}")
+	public ResponseEntity updateEvent(@PathVariable Integer id, @RequestBody @Valid EventDto eventDto ,Errors erros) {
+		Optional<Event> optionalEvent = this.eventRepository.findById(id);
+
+		if(optionalEvent.isEmpty()) return ResponseEntity.notFound().build();
+		if(erros.hasErrors()) return ResponseEntity.badRequest().build();
+
+		this.eventValidator.validate(eventDto, erros);
+
+		if(erros.hasErrors()) return ResponseEntity.badRequest().build();
+
+		Event existingEvent = optionalEvent.get();
+		// 어디에서 어디로
+		this.modelMapper.map(eventDto, existingEvent);
+		Event saveEvent = this.eventRepository.save(existingEvent);
+		EventResource eventResource = new EventResource(saveEvent);
+		eventResource.add(Link.of("/docs/index.html#resources-events-get").withRel("profile"));
+		return ResponseEntity.ok(eventResource);
 	}
 
 }
