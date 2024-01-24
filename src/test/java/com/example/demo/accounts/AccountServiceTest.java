@@ -1,12 +1,17 @@
 package com.example.demo.accounts;
 
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.internal.runners.statements.ExpectException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -18,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 class AccountServiceTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Autowired
     AccountService accountService;
@@ -45,6 +53,15 @@ class AccountServiceTest {
         // Then
         Assertions.assertSame(userDetails.getPassword(), password);
 
+    }
+
+    @Test
+    public void findByUsernameFail() {
+        String username = "random@email.com";
+        accountService.loadUserByUsername("random@email.com");
+        Assert.assertThrows(UsernameNotFoundException.class, () -> {
+
+        });
     }
 
 }
