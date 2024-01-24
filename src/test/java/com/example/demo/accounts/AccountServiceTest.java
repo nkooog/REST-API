@@ -50,7 +50,7 @@ class AccountServiceTest {
         UserDetailsService userDetailsService = accountService;
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        // Then
+        // Then  test
         Assertions.assertSame(userDetails.getPassword(), password);
 
     }
