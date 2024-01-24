@@ -1,5 +1,6 @@
 package com.example.demo.events;
 
+import com.example.demo.accounts.Account;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,7 +34,8 @@ public class Event {
 
     @Enumerated(EnumType.STRING) // ???
     private EventStatus eventStatus = EventStatus.DRAFT;
-
+    @ManyToOne
+    private Account manager;
     public void update() {
         this.free = (this.basePrice == 0 && this.maxPrice == 0) ? true : false;
         this.offline = (this.location == null || this.location.isBlank()) ? false : true;
