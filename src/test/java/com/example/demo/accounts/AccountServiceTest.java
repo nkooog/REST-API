@@ -2,7 +2,6 @@ package com.example.demo.accounts;
 
 import org.junit.Assert;
 import org.junit.Rule;
-import org.junit.internal.runners.statements.ExpectException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -60,7 +57,7 @@ class AccountServiceTest {
         String username = "random@email.com";
         accountService.loadUserByUsername("random@email.com");
         Assert.assertThrows(UsernameNotFoundException.class, () -> {
-            // ???????
+
         });
     }
 
