@@ -46,69 +46,69 @@ class EventControllerTest extends BaseControllerTest {
 			.limitOfEnrollment(100)
 			.location("Inchon City")
 			.build();
-	mockMvc.perform(post("/api/events")
-					.contentType(MediaType.APPLICATION_JSON) // 이 요청 본문에 json을 담아서 보내주고 있다
-					.accept(MediaTypes.HAL_JSON_VALUE) // 원하는 응답
-					.content(objectMapper.writeValueAsString(event)) // Response Body에 작성
-			)
-			.andDo(print())
-			.andExpect(status().isCreated())
-			.andExpect(header().exists(HttpHeaders.LOCATION)) // ??
-			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-			.andExpect(jsonPath("free").exists())
-			.andExpect(jsonPath("offline").exists())
-			.andExpect(jsonPath("eventStatus").value(Matchers.not(EventStatus.DRAFT)))
-			.andExpect(jsonPath("_links.query-events").exists())
-			.andExpect(jsonPath("_links.self").exists())
-			.andExpect(jsonPath("_links.update-events").exists())
-			.andDo(document("create-event"
-			,	links(
-						 linkWithRel("self").description("link to self")
-						,linkWithRel("query-events").description("link to query")
-						,linkWithRel("update-events").description("link to update")
-						,linkWithRel("profile").description("link to profile")
-					),
-					requestHeaders(
-						 headerWithName(HttpHeaders.ACCEPT).description("APPLICATION_JSON")
-						,headerWithName(HttpHeaders.CONTENT_TYPE).description("content-type")
-					),
-					requestFields(
-						 fieldWithPath("name").description("Name of new event")
-						,fieldWithPath("description").description("description of new event")
-						,fieldWithPath("beginEnrollmentDateTime").description("beginEnrollmentDateTime of new event")
-						,fieldWithPath("closeEnrollmentDateTime").description("closeEnrollmentDateTime of new event")
-						,fieldWithPath("beginEventDateTime").description("beginEventDateTime of new event")
-						,fieldWithPath("endEventDateTime").description("endEventDateTime of new event")
-						,fieldWithPath("basePrice").description("basePrice of new event")
-						,fieldWithPath("maxPrice").description("maxPrice of new event")
-						,fieldWithPath("limitOfEnrollment").description("limitOfEnrollment of new event")
-						,fieldWithPath("location").description("location of new event")
-					),
-					responseHeaders(
-						  headerWithName(HttpHeaders.LOCATION).description("/api/events")
-						 ,headerWithName(HttpHeaders.CONTENT_TYPE).description("hal_json")
-					),
-					responseFields(
-						 fieldWithPath("id").description("id of new event")
-						,fieldWithPath("name").description("Name of new event")
-						,fieldWithPath("description").description("description of new event")
-						,fieldWithPath("beginEnrollmentDateTime").description("beginEnrollmentDateTime of new event")
-						,fieldWithPath("closeEnrollmentDateTime").description("closeEnrollmentDateTime of new event")
-						,fieldWithPath("beginEventDateTime").description("beginEventDateTime of new event")
-						,fieldWithPath("endEventDateTime").description("endEventDateTime of new event")
-						,fieldWithPath("basePrice").description("basePrice of new event")
-						,fieldWithPath("maxPrice").description("maxPrice of new event")
-						,fieldWithPath("limitOfEnrollment").description("limitOfEnrollment of new event")
-						,fieldWithPath("location").description("location of new event")
-						,fieldWithPath("free").description("it tells if this event is free")
-						,fieldWithPath("offline").description("it tells if this event is offline")
-						,fieldWithPath("eventStatus").description("event status")
-						,fieldWithPath("_links.self.href").description("links.self")
-						,fieldWithPath("_links.query-events.href").description("links.query-events")
-						,fieldWithPath("_links.update-events.href").description("links.update-events")
-						,fieldWithPath("_links.profile.href").description("links.profile")
-					)
-			));
+		mockMvc.perform(post("/api/events")
+						.contentType(MediaType.APPLICATION_JSON) // 이 요청 본문에 json을 담아서 보내주고 있다
+						.accept(MediaTypes.HAL_JSON_VALUE) // 원하는 응답
+						.content(objectMapper.writeValueAsString(event)) // Response Body에 작성
+				)
+				.andDo(print())
+				.andExpect(status().isCreated())
+				.andExpect(header().exists(HttpHeaders.LOCATION)) // ??
+				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+				.andExpect(jsonPath("free").exists())
+				.andExpect(jsonPath("offline").exists())
+				.andExpect(jsonPath("eventStatus").value(Matchers.not(EventStatus.DRAFT)))
+				.andExpect(jsonPath("_links.query-events").exists())
+				.andExpect(jsonPath("_links.self").exists())
+				.andExpect(jsonPath("_links.update-events").exists())
+				.andDo(document("create-event"
+						, links(
+								linkWithRel("self").description("link to self")
+								, linkWithRel("query-events").description("link to query")
+								, linkWithRel("update-events").description("link to update")
+								, linkWithRel("profile").description("link to profile")
+						),
+						requestHeaders(
+								headerWithName(HttpHeaders.ACCEPT).description("APPLICATION_JSON")
+								, headerWithName(HttpHeaders.CONTENT_TYPE).description("content-type")
+						),
+						requestFields(
+								fieldWithPath("name").description("Name of new event")
+								, fieldWithPath("description").description("description of new event")
+								, fieldWithPath("beginEnrollmentDateTime").description("beginEnrollmentDateTime of new event")
+								, fieldWithPath("closeEnrollmentDateTime").description("closeEnrollmentDateTime of new event")
+								, fieldWithPath("beginEventDateTime").description("beginEventDateTime of new event")
+								, fieldWithPath("endEventDateTime").description("endEventDateTime of new event")
+								, fieldWithPath("basePrice").description("basePrice of new event")
+								, fieldWithPath("maxPrice").description("maxPrice of new event")
+								, fieldWithPath("limitOfEnrollment").description("limitOfEnrollment of new event")
+								, fieldWithPath("location").description("location of new event")
+						),
+						responseHeaders(
+								headerWithName(HttpHeaders.LOCATION).description("/api/events")
+								, headerWithName(HttpHeaders.CONTENT_TYPE).description("hal_json")
+						),
+						responseFields(
+								fieldWithPath("id").description("id of new event")
+								, fieldWithPath("name").description("Name of new event")
+								, fieldWithPath("description").description("description of new event")
+								, fieldWithPath("beginEnrollmentDateTime").description("beginEnrollmentDateTime of new event")
+								, fieldWithPath("closeEnrollmentDateTime").description("closeEnrollmentDateTime of new event")
+								, fieldWithPath("beginEventDateTime").description("beginEventDateTime of new event")
+								, fieldWithPath("endEventDateTime").description("endEventDateTime of new event")
+								, fieldWithPath("basePrice").description("basePrice of new event")
+								, fieldWithPath("maxPrice").description("maxPrice of new event")
+								, fieldWithPath("limitOfEnrollment").description("limitOfEnrollment of new event")
+								, fieldWithPath("location").description("location of new event")
+								, fieldWithPath("free").description("it tells if this event is free")
+								, fieldWithPath("offline").description("it tells if this event is offline")
+								, fieldWithPath("eventStatus").description("event status")
+								, fieldWithPath("_links.self.href").description("links.self")
+								, fieldWithPath("_links.query-events.href").description("links.query-events")
+								, fieldWithPath("_links.update-events.href").description("links.update-events")
+								, fieldWithPath("_links.profile.href").description("links.profile")
+						)
+				));
 	}
 
 	@Test
