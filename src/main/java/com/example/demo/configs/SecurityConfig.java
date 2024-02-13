@@ -44,7 +44,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http    .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/static/docs/index.html","/api/events", "/favicon.ico")
                         .permitAll().anyRequest().authenticated())
                 .formLogin(withDefaults());;
